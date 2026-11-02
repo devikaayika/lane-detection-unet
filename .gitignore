@@ -1,0 +1,23 @@
+
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+.DS_Store
+
+# Dataset and generated outputs
+dataset/
+outputs/
+
+# Uploaded images and generated results
+static/uploads/
+static/results/
+
+# Unused model backups
+models/lane_unet.keras
+models/lane_unet_backup.keras

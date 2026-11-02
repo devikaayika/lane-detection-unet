@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaneVision AI | Intelligent Lane Detection</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg: #080d18;
+    --panel: #101827;
+    --border: #263349;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --green: #58f5a5;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.navbar {
+    min-height: 76px;
+    padding: 12px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid var(--border);
+    background: #080d18;
+}
+
+.logo {
+    font: 700 22px 'Space Grotesk', sans-serif;
+}
+
+.logo span {
+    color: var(--green);
+}
+
+.status {
+    color: #a2f7c7;
+    border: 1px solid #28543f;
+    border-radius: 30px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+main {
+    width: min(1120px, 92%);
+    margin: auto;
+}
+
+.hero {
+    text-align: center;
+    padding: 65px 0 40px;
+}
+
+.eyebrow {
+    color: var(--green);
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    font: 600 clamp(36px, 6vw, 60px)/1.15 'Space Grotesk', sans-serif;
+    letter-spacing: -2px;
+    margin: 20px auto 15px;
+}
+
+.hero h1 span {
+    color: var(--green);
+}
+
+.hero p {
+    max-width: 600px;
+    margin: auto;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.feature-pill {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #111a28;
+    color: #cbd5e1;
+    font-size: 12px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 35px;
+}
+
+.card {
+    background: linear-gradient(145deg, #121c2b, #0e1624);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.card-head {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.card-head h2 {
+    font: 600 17px 'Space Grotesk', sans-serif;
+}
+
+.card-head p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.step-tag {
+    color: var(--green);
+    border: 1px solid #345044;
+    padding: 5px 9px;
+    border-radius: 7px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.card-body {
+    padding: 22px;
+}
+
+.dropzone {
+    min-height: 230px;
+    padding: 20px 15px;
+    border: 1.5px dashed #43516a;
+    border-radius: 13px;
+    background: #0b1421;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dropzone:hover,
+.dropzone.dragover {
+    border-color: var(--green);
+    background: #10251f;
+}
+
+.upload-symbol {
+    width: 55px;
+    height: 55px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #345044;
+    border-radius: 15px;
+    color: var(--green);
+    font-size: 25px;
+    margin-bottom: 14px;
+}
+
+.dropzone strong {
+    font-size: 14px;
+}
+
+.dropzone p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.browse {
+    color: var(--green);
+    text-decoration: underline;
+}
+
+.file-meta {
+    width: 100%;
+    overflow-wrap: anywhere;
+    color: #a7f3d0;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.preview {
+    display: none;
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.preview.show {
+    display: block;
+}
+
+.upload-notes {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: #8291a8;
+    font-size: 11px;
+    margin-top: 12px;
+}
+
+.primary-btn {
+    width: 100%;
+    margin-top: 20px;
+    border: 0;
+    border-radius: 10px;
+    padding: 14px;
+    color: #052316;
+    background: linear-gradient(100deg, #58f5a5, #a0f5c5);
+    font-weight: 700;
+}
+
+.primary-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.preview-note {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.error {
+    margin-top: 15px;
+    border: 1px solid #713a45;
+    background: #3a1822;
+    color: #fecdd3;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+/* Original image and result displayed side by side */
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 15px;
+}
+
+.comparison-item {
+    min-width: 0;
+}
+
+.comparison-item h3 {
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: #f1f5f9;
+}
+
+.result-image {
+    display: block;
+    width: 100%;
+    height: 260px;
+    object-fit: contain;
+    background: #050912;
+    border-radius: 8px;
+}
+
+.result-stage {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 25px;
+    background: #0b1421;
+}
+
+.empty-state {
+    color: var(--muted);
+}
+
+.empty-state h3 {
+    color: #dce5f2;
+    font: 500 16px 'Space Grotesk', sans-serif;
+}
+
+.empty-state p {
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.road-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.result-caption {
+    padding: 13px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.result-caption a {
+    color: var(--green);
+    text-decoration: none;
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #25db84;
+}
+
+.summary {
+    margin: 25px 0 40px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.section-heading h2 {
+    font: 600 21px 'Space Grotesk', sans-serif;
+}
+
+.section-heading p {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.metric {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 18px;
+    min-width: 0;
+}
+
+.metric-top {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.metric-value {
+    font: 600 22px 'Space Grotesk', sans-serif;
+    margin-top: 12px;
+    overflow-wrap: anywhere;
+}
+
+.metric-desc {
+    color: #7e8da4;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.pipeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.pipeline-item {
+    border-top: 1px solid #314056;
+    padding: 17px 0;
+}
+
+.pipeline-num {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.pipeline-item h3 {
+    font: 600 15px 'Space Grotesk', sans-serif;
+    margin: 7px 0;
+}
+
+.pipeline-item p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 23px 5%;
+    text-align: center;
+    color: #7e8da4;
+    font-size: 12px;
+}
+
+footer span {
+    color: var(--green);
+}
+
+@media (max-width: 800px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding-top: 45px;
+    }
+}
+
+@media (max-width: 520px) {
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result-image {
+        height: 240px;
+    }
+
+    .metrics,
+    .pipeline {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar {
+        padding: 12px 4%;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .card-body {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">Lane<span>Vision AI</span></div>
+    <div class="status">● Model interface</div>
+</nav>
+
+<main>
+
+    <header class="hero">
+        <div class="eyebrow">Intelligent mobility · Computer vision</div>
+
+        <h1>
+            Understand the road.<br>
+            <span>Pixel by pixel.</span>
+        </h1>
+
+        <p>
+            An interactive lane segmentation demo powered by a U-Net
+            deep learning model. Upload a road image to explore its
+            predicted lane markings.
+        </p>
+
+        <div class="features">
+            <span class="feature-pill">U-Net segmentation</span>
+            <span class="feature-pill">Image inference</span>
+            <span class="feature-pill">Visual overlay</span>
+        </div>
+    </header>
+
+    <div class="layout">
+
+        <!-- IMAGE UPLOAD CARD -->
+        <section class="card">
+
+            <div class="card-head">
+                <div>
+                    <h2>Image workspace</h2>
+                    <p>Configure your analysis input</p>
+                </div>
+                <span class="step-tag">STEP 01</span>
+            </div>
+
+            <div class="card-body">
+
+                <form id="uploadForm"
+                      method="POST"
+                      action="/"
+                      enctype="multipart/form-data">
+
+                    <label class="dropzone"
+                           id="dropzone"
+                           for="imageInput">
+
+                        <img id="preview"
+                             class="preview"
+                             alt="Selected road image preview">
+
+                        <div class="upload-symbol" id="uploadSymbol">↑</div>
+
+                        <strong id="uploadTitle">
+                            Drop your road image here
+                        </strong>
+
+                        <p id="uploadText">
+                            or <span class="browse">browse files</span>
+                        </p>
+
+                        <div class="file-meta" id="fileMeta"></div>
+                    </label>
+
+                    <input class="hidden-input"
+                           type="file"
+                           id="imageInput"
+                           name="image"
+                           accept=".jpg,.jpeg,.png"
+                           required>
+
+                    <div class="upload-notes">
+                        <span>JPG · JPEG · PNG</span>
+                        <span>Maximum 10 MB</span>
+                    </div>
+
+                    <button class="primary-btn"
+                            id="submitButton"
+                            type="submit">
+                        Run lane detection →
+                    </button>
+
+                </form>
+
+                <p class="preview-note">
+                    For best results, use a clear forward-facing road image.
+                </p>
+
+                {% if error %}
+                <div class="error" role="alert">{{ error }}</div>
+                {% endif %}
+
+            </div>
+        </section>
+
+        <!-- OUTPUT CARD -->
+        <section class="card">
+
+            <div class="card-head">
+                <div>
+                    <h2>Segmentation output</h2>
+                    <p>Original image vs. model prediction</p>
+                </div>
+                <span class="step-tag">STEP 02</span>
+            </div>
+
+            {% if result_url %}
+
+            <div class="comparison-grid">
+
+                <!-- ORIGINAL UPLOADED IMAGE -->
+                <div class="comparison-item">
+                    <h3>Original Image</h3>
+
+                    <img class="result-image"
+                         src="{{ input_url }}"
+                         alt="Original uploaded road image">
+                </div>
+
+                <!-- IMAGE WITH LANE MARKINGS -->
+                <div class="comparison-item">
+                    <h3>Lane Detection Result</h3>
+
+                    <img class="result-image"
+                         src="{{ result_url }}?v={{ range(1, 1000000) | random }}"
+                         alt="Road image with predicted lane markings">
+                </div>
+
+            </div>
+
+            <div class="result-caption">
+                <span class="legend">
+                    <span class="legend-dot"></span>
+                    Predicted lane pixels
+                </span>
+
+                <a href="{{ result_url }}" download>
+                    Download result ↓
+                </a>
+            </div>
+
+            {% else %}
+
+            <div class="result-stage">
+                <div class="empty-state">
+                    <div class="road-icon">▥</div>
+                    <h3>Awaiting image input</h3>
+                    <p>
+                        Your lane segmentation result will appear here
+                        after processing.
+                    </p>
+                </div>
+            </div>
+
+            <div class="result-caption">
+                <span>Output preview</span>
+                <span>Ready for analysis</span>
+            </div>
+
+            {% endif %}
+
+        </section>
+    </div>
+
+    <!-- PREDICTION OVERVIEW -->
+    <section class="summary">
+
+        <div class="section-heading">
+            <div>
+                <h2>Prediction overview</h2>
+                <p>Summary of the latest processed image</p>
+            </div>
+            <p>U-Net inference</p>
+        </div>
+
+        <div class="metrics">
+
+            <article class="metric">
+                <div class="metric-top">Input resolution</div>
+
+                <div class="metric-value" id="resolutionMetric">
+                    {% if result_url %}Processed{% else %}—{% endif %}
+                </div>
+
+                <div class="metric-desc">Original image dimensions</div>
+            </article>
+
+            <article class="metric">
+                <div class="metric-top">Predicted pixels</div>
+
+                <div class="metric-value">
+                    {% if lane_pixels is defined and lane_pixels is not none %}
+                        {{ "{:,}".format(lane_pixels) }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </div>
+
+                <div class="metric-desc">
+                    Pixels classified as lane markings
+                </div>
+            </article>
+
+            <article class="metric">
+                <div class="metric-top">Model status</div>
+
+                <div class="metric-value">
+                    {% if result_url %}Completed{% else %}Ready{% endif %}
+                </div>
+
+                <div class="metric-desc">
+                    Website inference workflow
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <div class="section-heading">
+        <div>
+            <h2>How it works</h2>
+            <p>From road image to visual prediction</p>
+        </div>
+    </div>
+
+    <section class="pipeline">
+
+        <article class="pipeline-item">
+            <div class="pipeline-num">01 / INPUT</div>
+            <h3>Upload image</h3>
+            <p>
+                Select a road scene. The application validates and
+                prepares the image.
+            </p>
+        </article>
+
+        <article class="pipeline-item">
+            <div class="pipeline-num">02 / INFERENCE</div>
+            <h3>U-Net prediction</h3>
+            <p>
+                The trained model estimates a probability map for lane pixels.
+            </p>
+        </article>
+
+        <article class="pipeline-item">
+            <div class="pipeline-num">03 / OUTPUT</div>
+            <h3>Visualize lanes</h3>
+            <p>
+                The predicted lane markings are overlaid on the road image.
+            </p>
+        </article>
+
+    </section>
+
+    <p style="color:#8190a6;font-size:11px;margin-bottom:28px;">
+        Academic prototype only. Predicted lane pixels do not establish
+        detection accuracy or driving safety.
+    </p>
+
+</main>
+
+<footer>
+    <span>LaneVision AI</span> · Lane Detection using U-Net · Academic Mini Project
+</footer>
+
+<script>
+const form = document.getElementById("uploadForm");
+const input = document.getElementById("imageInput");
+const zone = document.getElementById("dropzone");
+const preview = document.getElementById("preview");
+const meta = document.getElementById("fileMeta");
+const title = document.getElementById("uploadTitle");
+const uploadText = document.getElementById("uploadText");
+const symbol = document.getElementById("uploadSymbol");
+const button = document.getElementById("submitButton");
+
+let previewUrl = null;
+
+function selectFile(file) {
+    if (!file) return;
+
+    const allowed = ["image/jpeg", "image/png"];
+
+    if (!allowed.includes(file.type)) {
+        meta.textContent = "Please select a JPG, JPEG, or PNG image.";
+        input.value = "";
+        preview.classList.remove("show");
+        return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        meta.textContent = "The image exceeds the 10 MB limit.";
+        input.value = "";
+        preview.classList.remove("show");
+        return;
+    }
+
+    if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+    }
+
+    previewUrl = URL.createObjectURL(file);
+
+    preview.onload = function () {
+        const dims =
+            preview.naturalWidth + " × " +
+            preview.naturalHeight + " px";
+
+        document.getElementById("resolutionMetric").textContent = dims;
+    };
+
+    preview.src = previewUrl;
+    preview.classList.add("show");
+
+    symbol.style.display = "none";
+    title.textContent = file.name;
+    uploadText.textContent = "Image selected successfully";
+
+    meta.textContent =
+        (file.size / (1024 * 1024)).toFixed(2) +
+        " MB · " + file.type.split("/")[1].toUpperCase();
+}
+
+input.addEventListener("change", function () {
+    selectFile(input.files[0]);
+});
+
+["dragenter", "dragover"].forEach(function (eventName) {
+    zone.addEventListener(eventName, function (event) {
+        event.preventDefault();
+        zone.classList.add("dragover");
+    });
+});
+
+["dragleave", "drop"].forEach(function (eventName) {
+    zone.addEventListener(eventName, function (event) {
+        event.preventDefault();
+        zone.classList.remove("dragover");
+    });
+});
+
+zone.addEventListener("drop", function (event) {
+    const file = event.dataTransfer.files[0];
+
+    if (!file) return;
+
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    input.files = transfer.files;
+
+    selectFile(file);
+});
+
+form.addEventListener("submit", function (event) {
+    if (!input.files.length) {
+        event.preventDefault();
+        meta.textContent = "Select an image before running detection.";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Processing image...";
+});
+</script>
+
+</body>
+</html>
